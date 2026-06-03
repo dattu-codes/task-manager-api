@@ -1,104 +1,74 @@
-# Task Manager API
+# Task Manager API (Spring Boot)
 
-A RESTful backend API for managing tasks, built using **Node.js** and
-**Express.js**.\
-This project allows users to perform CRUD operations on tasks such as
-creating, viewing, updating, and deleting tasks.
+A RESTful backend API for managing tasks, built using **Java**, **Spring Boot**, and **MySQL**.
+This project allows users to perform CRUD operations on tasks such as creating, viewing, updating, and deleting tasks.
 
-The goal of this project is to demonstrate backend development concepts
-including **REST API design, route handling, middleware usage, and
-server-side logic**.
+The goal of this project is to demonstrate backend development concepts including **REST API design, Spring Data JPA integration, layered architecture (Controller, Service, Repository), and database persistence**.
 
-------------------------------------------------------------------------
+---
 
 ## Features
 
--   Create new tasks
--   Retrieve all tasks
--   Retrieve a specific task by ID
--   Update task information
--   Delete tasks
--   RESTful API architecture
--   Error handling and validation
+- Create new tasks
+- Retrieve all tasks
+- Retrieve a specific task by ID
+- Update task information
+- Delete tasks
+- Layered MVC architecture
+- Persistent data storage with MySQL
 
-------------------------------------------------------------------------
+---
 
 ## Tech Stack
 
-**Backend** - Node.js - Express.js
+**Backend**: Java 17, Spring Boot, Spring Web
+**Database**: MySQL, Spring Data JPA, Hibernate
+**Tools**: Maven, Postman, Git
 
-**Tools** - Postman (API Testing) - Git - GitHub
+---
 
-------------------------------------------------------------------------
+## Prerequisites
 
-## Project Structure
+- Java 17
+- Maven
+- MySQL Server running on `localhost:3306`
 
-    task-manager-api
-    │
-    ├── src
-    │   ├── app.js
-    │   ├── routes
-    │   ├── controllers
-    │   └── models
-    │
-    ├── package.json
-    └── README.md
+---
 
-------------------------------------------------------------------------
+## Installation & Setup
 
-## Installation
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/dattu-codes/task-manager-api.git
+   cd task-manager-api
+   ```
 
-Clone the repository
+2. **Configure Database**
+   Create a database in MySQL named `task_manager`:
+   ```sql
+   CREATE DATABASE task_manager;
+   ```
+   Update the database credentials in `src/main/resources/application.properties` if they differ from your local setup (default is `root`/`root`).
 
-    git clone https://github.com/dattu-codes/task-manager-api.git
+3. **Run the Application**
+   ```bash
+   ./mvnw spring-boot:run
+   ```
+   The server will start on `http://localhost:8080`.
 
-Navigate to the project directory
-
-    cd task-manager-api
-
-Install dependencies
-
-    npm install
-
-------------------------------------------------------------------------
-
-## Running the Application
-
-Start the server
-
-    node src/app.js
-
-or
-
-    npm start
-
-The server will run on:
-
-    http://localhost:3000
-
-------------------------------------------------------------------------
+---
 
 ## API Endpoints
 
 ### Get all tasks
-
-    GET /tasks
-
-Returns all tasks.
+`GET /tasks`
 
 ### Get task by ID
-
-    GET /tasks/:id
-
-Returns a specific task.
+`GET /tasks/{id}`
 
 ### Create a task
-
-    POST /tasks
-
-Example request body:
-
-``` json
+`POST /tasks`
+```json
 {
   "title": "Complete project",
   "description": "Finish task manager backend",
@@ -107,46 +77,22 @@ Example request body:
 ```
 
 ### Update a task
-
-    PATCH /tasks/:id
-
-Updates an existing task.
+`PUT /tasks/{id}`
+```json
+{
+  "title": "Updated title",
+  "description": "Updated description",
+  "completed": true
+}
+```
 
 ### Delete a task
+`DELETE /tasks/{id}`
 
-    DELETE /tasks/:id
-
-Deletes a task.
-
-------------------------------------------------------------------------
-
-## Testing the API
-
-You can test the API using:
-
--   Postman
--   Thunder Client (VS Code)
--   cURL
-
-Example request:
-
-    GET http://localhost:3000/tasks
-
-------------------------------------------------------------------------
-
-## Future Improvements
-
--   User authentication (JWT)
--   Database integration (MongoDB)
--   Pagination and filtering
--   Task priorities and deadlines
--   Frontend integration
-
-------------------------------------------------------------------------
+---
 
 ## Author
 
 **Dattatreya Teella**
 
-GitHub:\
-https://github.com/dattu-codes
+GitHub: [dattu-codes](https://github.com/dattu-codes)
