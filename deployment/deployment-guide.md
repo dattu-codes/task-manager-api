@@ -1,33 +1,26 @@
-# Live Deployment Guide
+# Deployment Architecture & Strategies
 
-This project is configured for containerized deployment using Docker. You can deploy it live easily using either Docker Compose or free cloud platforms.
+This project is architected to support flexible, modern deployment patterns. I have configured and tested two main deployment pathways to ensure high availability and simplicity in configuration:
 
-## Option 1: Local Docker Deployment
-To run the full stack (API + MySQL database) locally in isolated containers:
-1. Make sure Docker Desktop is running.
-2. Navigate to this directory and run:
-   ```bash
-   docker-compose up --build
-   ```
-3. The API will be live at `http://localhost:8080`.
+## 1. Containerized Multi-Service Deployment (Docker Compose)
+To simplify local environment replication and virtual private server (VPS) hosting, I configured a multi-container deployment using Docker Compose. This orchestrates:
+* **Backend Application Container**: Built using a multi-stage Dockerfile to minimize the final container size and run in a secure JRE environment.
+* **Database Container**: A MySQL 8.0 database instance configured with volume persistence to prevent data loss.
 
-## Option 2: Live Cloud Hosting (Render or Railway)
-To deploy the application live on the cloud for free:
+### Setup Command:
+From the root of the project, run:
+```bash
+docker-compose -f deployment/docker-compose.yml up --build
+```
+This automatically initializes the containers, sets up the private network bridge, and exposes the API on port `8080`.
 
-### 1. Database Setup (Aiven or Supabase)
-Since the app needs a live MySQL database, spin up a free managed MySQL database on [Aiven.io](https://aiven.io/):
-* Create a free account and choose **MySQL**.
-* Copy the connection URL, username, and password.
+## 2. Cloud PaaS Deployment (Render / Railway)
+The backend is fully decoupled and configured to deploy directly to cloud hosting platforms:
+* **Database Layer**: Can be integrated with any managed cloud database instance (such as Aiven, AWS RDS, or Supabase MySQL).
+* **Application Layer**: Automatically compiled, built, and deployed using the root `Dockerfile` upon pushes to the `main` branch.
 
-### 2. Backend Deployment on Render
-1. Create a free account on [Render](https://render.com/).
-2. Click **New +** and select **Web Service**.
-3. Connect your GitHub repository `task-manager-api`.
-4. Set the following details:
-   * **Runtime**: `Docker`
-   * **Branch**: `main`
-5. In the **Environment Variables** section, add:
-   * `SPRING_DATASOURCE_URL` = `jdbc:mysql://<your-aiven-mysql-host>:<port>/<db_name>`
-   * `SPRING_DATASOURCE_USERNAME` = `<your-username>`
-   * `SPRING_DATASOURCE_PASSWORD` = `<your-password>`
-6. Click **Deploy Web Service**. Render will automatically build the `Dockerfile` and deploy the service live with a public URL!
+### Configured Environment Variables:
+The application dynamically binds connection configurations at runtime using standard system environment variables:
+* `SPRING_DATASOURCE_URL`: The JDBC connection URI pointing to the cloud database.
+* `SPRING_DATASOURCE_USERNAME`: Database login username.
+* `SPRING_DATASOURCE_PASSWORD`: Database login password.
