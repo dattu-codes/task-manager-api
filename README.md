@@ -27,37 +27,48 @@ A secure, containerized RESTful API backend for task tracking and management. Bu
 ## 🛠️ Tech Stack
 
 *   **Backend:** Java 17, Spring Boot, Spring Security, JWT (jjwt)
+*   **Testing:** JUnit 5, Mockito (Unit & Integration Testing)
 *   **Persistence:** Spring Data JPA, Hibernate, MySQL, H2 (for development)
-*   **DevOps & Tools:** Docker, Maven, Postman
+*   **DevOps & Tools:** Docker, Docker Compose, Maven, Postman
 
 ---
 
 ## 📂 Project Structure
 
 ```text
-├── src/main/java/com/dattatreya/taskmanager/
-│   ├── controller/         # REST Controllers (Auth & Task CRUD)
-│   ├── model/              # Database Entities (User & Task)
-│   ├── repository/         # JPA Repositories (Database access interfaces)
-│   ├── security/           # JWT Utilities, JWT Filter, & Spring Security Configuration
-│   ├── service/            # Business logic orchestration
-│   └── TaskmanagerApplication.java
+├── src/
+│   ├── main/java/com/dattatreya/taskmanager/
+│   │   ├── controller/         # REST Controllers (Auth & Task CRUD)
+│   │   ├── model/              # Database Entities (User & Task)
+│   │   ├── repository/         # JPA Repositories (Database access interfaces)
+│   │   ├── security/           # JWT Utilities, JWT Filter, & Spring Security Configuration
+│   │   ├── service/            # Business logic orchestration
+│   │   └── TaskmanagerApplication.java
+│   └── test/java/com/dattatreya/taskmanager/
+│       └── service/            # Unit tests for business logic (JUnit 5 & Mockito)
 │
-├── Dockerfile              # Multi-stage Docker build config
-└── pom.xml                 # Maven dependency file
+├── deployment/                 # Deployment configurations (Docker Compose, Hosting Guide)
+├── Dockerfile                  # Multi-stage Docker build config
+└── pom.xml                     # Maven dependency file
 ```
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Getting Started & Execution
 
-### Option 1: Running locally with Maven
+### 1. Running Unit Tests
+To verify the service layer and business logic execution using the configured JUnit 5 and Mockito suites, run:
+```bash
+./mvnw test
+```
+
+### 2. Running Locally with Maven
 1.  **Configure Database:**  
-    Create a MySQL database named `task_manager`:
+    Create a local MySQL database named `task_manager`:
     ```sql
     CREATE DATABASE task_manager;
     ```
-    If your local MySQL username/password is different than `root`/`root`, update `src/main/resources/application.properties`.
+    If your local MySQL credentials differ from `root`/`root`, update the configuration in `src/main/resources/application.properties`.
 
 2.  **Compile & Run:**
     ```bash
@@ -65,11 +76,14 @@ A secure, containerized RESTful API backend for task tracking and management. Bu
     ```
     The server will start on `http://localhost:8080`.
 
----
+### 3. Running with Docker Compose (Full Stack)
+To run both the Spring Boot API and the MySQL database in automated, isolated Docker containers:
+```bash
+docker-compose -f deployment/docker-compose.yml up --build
+```
 
-### Option 2: Running with Docker (Containerized)
+### 4. Running a Single Docker Container
 1.  **Build the Docker Image:**  
-    This uses a multi-stage build to package the application with Maven and run it inside a lightweight JRE environment.
     ```bash
     docker build -t task-manager-api .
     ```
